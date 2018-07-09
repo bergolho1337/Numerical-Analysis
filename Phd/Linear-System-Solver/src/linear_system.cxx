@@ -108,19 +108,13 @@ void LinearSystem::readRHS (const char fname[])
     ifstream in(fname);
     getline(in,str);
     in >> n >> k;
-    allocRHS(N);
+    b = allocVector(N);
     for (int i = 0; i < N; i++)
     {
         in >> val;
         b[i] = val;
     }
     in.close();
-}
-
-void LinearSystem::allocRHS (const int n)
-{
-    cout << "[+] Allocating memory for right-hand side ..." << endl;
-    b = (double*)malloc(sizeof(double)*n);
 }
 
 double* LinearSystem::allocVector (const int n)
@@ -139,7 +133,7 @@ void LinearSystem::printRHS ()
 void LinearSystem::solve ()
 {
     // Initial guess is a zero vector
-    x = (double*)calloc(N,sizeof(double));
+    x = allocVector(N);
     // Initial guess is the 'rhs' vector
     for (int i = 0; i < N; i++)
         x[i] = b[i];
@@ -215,7 +209,7 @@ void LinearSystem::reduceToRowEchelonForm ()
     }
 }
 
-// Solves a general linear system without partial pivoting
+// Solves a general linear system WITHOUT partial pivoting
 void LinearSystem::GaussianElimination ()
 {
     cout << "[+] Solving linear system using Gaussian Elimination ..." << endl;
@@ -274,9 +268,10 @@ void LinearSystem::switchLines (int pivot[], const int pivot_line, const int i)
     pivot[pivot_line] = m;
 }
 
+// LU Decomposition with partial pivoting
 void LinearSystem::LUDecomposition ()
 {
-    cout << "[+] Solving linear system using LU Decomposition ..." << endl;
+    cout << "[+] Solving linear system using LU Decomposition with partial pivoting ..." << endl;
 
     // Copy the matrix A to LU
     LU = allocMatrix(N,N);
@@ -372,6 +367,12 @@ void LinearSystem::Jacobi ()
         iter++;
     }
     free(x_aux);
+    if (calcResidue() >= EPSILON)
+    {
+        cout << PRINT_DANGER << endl;
+        cout << "[-] ERROR ! The method has not converged !" << endl;
+        cout << PRINT_DANGER << endl;
+    }
     cout << "Number of iterations = " << iter << endl;
 }
 
@@ -397,6 +398,13 @@ void LinearSystem::Gauss_Seidel ()
         }
         iter++;
     }
+    if (calcResidue() >= EPSILON)
+    {
+        cout << PRINT_DANGER << endl;
+        cout << "[-] ERROR ! The method has not converged !" << endl;
+        cout << PRINT_DANGER << endl;
+    }
+        
     cout << "Number of iterations = " << iter << endl;
 }
 

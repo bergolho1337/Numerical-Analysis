@@ -10,6 +10,7 @@
 #include <cstring>
 
 #define PRINT_LINE "=================================================================================================================="
+#define PRINT_DANGER "****************************************************************************************************"
 
 const int MAX_ITER = 500;           // Maximum number of iterations
 const double EPSILON = 1.0e-05;     // Tolerance of the residue
@@ -33,11 +34,10 @@ public:
     ~LinearSystem ();
     void readMatrix (const char fname[]);
     double** allocMatrix (const int n, const int m);
+    double* allocVector (const int n);
     void printMatrix ();
     void readRHS (const char fname[]);
     void printRHS ();
-    void allocRHS (const int n);
-    double* allocVector (const int n);
 
     void solve ();
 
