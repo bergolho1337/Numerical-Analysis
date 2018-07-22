@@ -1,0 +1,25 @@
+cmake_minimum_required(VERSION 3.0.1)
+project(Assignment2)
+
+IF (CMAKE_VERSION VERSION_LESS "3.1")
+    IF (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+        SET(CMAKE_C_FLAGS "-std=gnu99 ${CMAKE_C_FLAGS}")
+    ENDIF(CMAKE_C_COMPILER_ID)
+ELSE()
+    SET(CMAKE_C_STANDARD 99)
+ENDIF()
+
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/shared-libs)
+
+ADD_SUBDIRECTORY(solver)
+
+ADD_EXECUTABLE(Assignment2 main.c)
+
+ADD_DEPENDENCIES(Assignment2 solver)
+
+TARGET_LINK_LIBRARIES(Assignment2 solver dl m)
+
+ADD_SUBDIRECTORY(problems-library)
+ADD_SUBDIRECTORY(linear-system-library)
+ADD_SUBDIRECTORY(nonlinear-system-library)
