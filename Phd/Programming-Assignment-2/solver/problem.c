@@ -9,6 +9,8 @@ struct problem_data* new_problem (int problem_id)
     p->neq = getNumberEquations(p->library_path);
     p->functions = getFunctions(p->handle,p->library_path,p->neq);
 
+    fprintf(stdout,"[Problem] Solving '%s'\n",p->problem_name);
+    
     return p;
 
 }
@@ -77,6 +79,16 @@ set_problem_fn** getFunctions (void *handle, const char *library_path, const uns
     set_problem_fn **functions = (set_problem_fn**)malloc(sizeof(set_problem_fn*)*neq);
 
     handle = dlopen(library_path,RTLD_LAZY);
+    if (!handle) 
+    {
+        fprintf(stderr,"%s\n",dlerror());
+        exit(EXIT_FAILURE);
+    }
+    else
+    {
+        fprintf(stdout,"[+] Problem library \"%s\" open with sucess\n",library_path);
+    }
+    
     char function_name[20];
 
     for (int i = 0; i < neq; i++)

@@ -8,8 +8,47 @@ struct solver_data* new_solver_data (int argc, char *argv[])
     s->nonlinear_system_solver_id = atoi(argv[3]);
 
     s->problem = new_problem(s->problem_id);
-    printProblem(s->problem);
+    //printProblem(s->problem);     // DEBUG
 
+    s->linear_system_solver = new_linear_system(s->linear_system_solver_id);
+
+    /*
+    DEBUG
+    s->linear_system_solver->n = 4;
+
+    s->linear_system_solver->A = (double*)malloc(sizeof(double)*4*4);
+    s->linear_system_solver->A[0] = 4.000000000000;
+    s->linear_system_solver->A[1] = -1.000000000000;
+    s->linear_system_solver->A[2] = 0.000000000000;
+    s->linear_system_solver->A[3] = -1.000000000000;
+    s->linear_system_solver->A[4] = 1.000000000000;
+    s->linear_system_solver->A[5] = -2.000000000000;
+    s->linear_system_solver->A[6] = 1.000000000000;
+    s->linear_system_solver->A[7] = 0.000000000000;
+    s->linear_system_solver->A[8] = 0.000000000000;
+    s->linear_system_solver->A[9] = 4.000000000000;
+    s->linear_system_solver->A[10] = -4.000000000000;
+    s->linear_system_solver->A[11] = 1.000000000000;
+    s->linear_system_solver->A[12] = 5.000000000000;
+    s->linear_system_solver->A[13] = 0.000000000000;
+    s->linear_system_solver->A[14] = 5.000000000000;
+    s->linear_system_solver->A[15] = -1.000000000000;
+
+    s->linear_system_solver->b = (double*)malloc(sizeof(double)*4);
+    s->linear_system_solver->b[0] = 1.000000000000;
+    s->linear_system_solver->b[1] = -2.000000000000;
+    s->linear_system_solver->b[2] = -3.000000000000;
+    s->linear_system_solver->b[3] = 4.000000000000;
+
+    s->linear_system_solver->x = (double*)malloc(sizeof(double)*4);
+    s->linear_system_solver->solver(s->linear_system_solver->A,s->linear_system_solver->b,s->linear_system_solver->n,s->linear_system_solver->x);
+    
+    printLinearSystem(s->linear_system_solver);     // DEBUG
+    for (int i = 0; i < 4; i++)
+        printf("%lf\n",s->linear_system_solver->x[i]);
+    */
+    
+        
     return s;
 }
 
@@ -17,10 +56,12 @@ void free_solver (struct solver_data *s)
 {
     if (s->problem)
         free_problem(s->problem);
+
+    if (s->linear_system_solver)
+        free_linear_system(s->linear_system_solver);
     
     free(s);
     // TO DO
-    // free_linear_system
     // free_nonlinear_system
 }
 

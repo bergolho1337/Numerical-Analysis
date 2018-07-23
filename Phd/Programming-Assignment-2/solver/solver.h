@@ -2,6 +2,7 @@
 #define SOLVER_H
 
 #include "problem.h"
+#include "linear-system.h"
 
 struct solver_data
 {
@@ -10,8 +11,8 @@ struct solver_data
     int nonlinear_system_solver_id; 
 
     struct problem_data *problem;
+    struct linear_system_data *linear_system_solver;
     // TODO:
-    //struct linear_system_data *linear_system_solver;
     //struct nonlinear_system_data *nonlinear_system_solver;
 };
 
