@@ -15,18 +15,20 @@ typedef SET_LINEAR_SYSTEM_SOLVER(set_linear_system_fn);
 
 struct linear_system_data
 {
-    void *handle;
-    char *method_name;
-    int n;
-    double *A;
-    double *b;
-    double *x;
-    set_linear_system_fn *solver;
+    void *handle;                   // Handle to the library that solves a linear system
+    char *method_name;              // Name of the solver method
+    int n;                          // Size of the linear system
+    double *A;                      // Coefficient matrix
+    double *b;                      // Right-Hand-Side array
+    double *x;                      // Solution array
+    set_linear_system_fn *solver;   // Pointer to the solver function
 };
 
+// Constructor and destructor
 struct linear_system_data* new_linear_system (const int linear_system_id);
 void free_linear_system (struct linear_system_data *ls);
 
+// Auxiliary functions 
 set_linear_system_fn* getMethodFunction (void *handle, const int linear_system_id);
 char *getMethodName (const int linear_system_id);
 void printLinearSystem (struct linear_system_data *ls);

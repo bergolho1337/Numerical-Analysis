@@ -193,6 +193,7 @@ void CG (double *A, double *b, const int n, double *x)
     free(q);
 }
 
+// Biconjugate Gradient Method
 void BiCG (double *A, double *b, const int n, double *x)
 {
     int iter = 0;
