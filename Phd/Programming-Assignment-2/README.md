@@ -2,13 +2,15 @@
 
 # Programming Assignment 2:
 
-- Pre-Requisites:
+### Pre-Requisites:
 	
+	- A UNIX like operational system
+
 	- C Compiler (gcc or clang)
 
 	- CMake
 
-- How to build the project:
+### How to build the project:
 
 	- Download the files and put them on a separate folder on your system
 
