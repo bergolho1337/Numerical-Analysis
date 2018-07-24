@@ -57,8 +57,8 @@ void checkSolution (const double *A, const double *b, const double *x, const int
         fprintf(stderr,"************************************************\n");
         exit(EXIT_FAILURE);
     }
-    fprintf(stdout,"[Linear-System-Solver] Number of iterations = %d\n",iter);
-    fprintf(stdout,"[Linear-System-Solver] Residue = %e\n",residue);
+    //fprintf(stdout,"[Linear-System-Solver] Number of iterations = %d\n",iter);
+    //fprintf(stdout,"[Linear-System-Solver] Residue = %e\n",residue);
 }
 
 void Jacobi (double *A, double *b, const int n, double *x)

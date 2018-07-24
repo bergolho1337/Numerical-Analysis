@@ -1,21 +1,23 @@
 #include "nonlinear-system-solver.h"
 
-void NewtonFiniteDifference (double *J, double *f, const int n, double *x,\
+double* NewtonFiniteDifference (double *J, double *f, const int n,\
                             set_linear_system_fn *solver_linear_system,\
                             set_problem_fn **functions)
 {
-    // TO DO: Implementar o metodo
     printTypeFiniteDifference();
 
     int iter = 0;
+    double s[n];
     // Allocate memory
+    double *x = (double*)malloc(sizeof(double)*n);
     J = (double*)malloc(sizeof(double)*n*n);
     f = (double*)malloc(sizeof(double)*n);
-    x = (double*)malloc(sizeof(double)*n);
 
     buildInitialGuess(x,n);
     do
     {
+        printCurrentSolution(x,n,functions,iter);
+
         if (iter % REBUILD_JACOBIAN == 0)
         {
             buildJacobian_FiniteDifferences(J,x,n,functions);
@@ -28,30 +30,37 @@ void NewtonFiniteDifference (double *J, double *f, const int n, double *x,\
             }
             */
         }
-            
+        buildRHS(f,x,functions,n);
 
+        // Solve the linear system: J.s = -f
+        solver_linear_system(J,f,n,s);
+
+        // Update the solution: x_k+1 = x_k + s_k
+        updateSolution(x,s,n);
 
         iter++;
     }while(!hasConverged(x,functions,n,iter));
-
-    /*
-    // DEBUG
-    solver_linear_system(J,f,n,x);
-
-    for (int i = 0; i < n; i++)
-        printf("%lf\n",x[i]);
     
-    printf("Testing problem functions\n");
-    double v[3] = {0,0,0};
-    for (int i = 0; i < 3; i++)
-        printf("Function %d = %lf\n",i+1,functions[i](v));
-    */
+    printCurrentSolution(x,n,functions,iter);
+    
+    return x;
+}
 
+void updateSolution (double *x, const double *s, const int n)
+{
+    for (int i = 0; i < n; i++)
+        x[i] += s[i];
+}
+
+void buildRHS (double *f, const double *x, set_problem_fn **functions, const int n)
+{
+    for (int i = 0; i < n; i++)
+        f[i] = -functions[i](x);
 }
 
 void buildJacobian_FiniteDifferences (double *J, double *x, const int n, set_problem_fn **functions)
 {
-    fprintf(stdout,"Rebuilding Jacobian matrix\n");
+    //fprintf(stdout,"[Nonlinear-System-Solver] Rebuilding Jacobian matrix\n");
     double x_aux[n], x_aux2[n];
     double H12 = 0.5*H;
     for (int i = 0; i < n; i++)
@@ -164,6 +173,7 @@ void buildInitialGuess (double *x, const int n)
                     break;
                 }
     }
+    fprintf(stdout,"\n");
 }
 
 void printTypeFiniteDifference ()
@@ -175,4 +185,13 @@ void printTypeFiniteDifference ()
         case 1: fprintf(stdout,"[Nonlinear-System-Solver] Using Central Finite Difference to approximate the derivatives\n");
                 break;
     }
+}
+
+void printCurrentSolution (const double *x, const int n, set_problem_fn **functions, const int iter)
+{
+    double residue = calcResidue(x,n,functions);
+    fprintf(stdout,"[Iteration %d] (",iter);
+    for (int i = 0; i < n-1; i++)
+        fprintf(stdout,"%.10lf,",x[i]);
+    fprintf(stdout,"%.10lf) -- Residue = %e\n",x[n-1],residue);
 }

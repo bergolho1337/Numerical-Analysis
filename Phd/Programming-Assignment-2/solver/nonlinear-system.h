@@ -13,13 +13,14 @@
 #define EXPORT_FN
 
 // This works like a function pointer macro ...
-#define SET_NONLINEAR_SYSTEM_SOLVER(name) EXPORT_FN void name(double *J, double *f, const int n, double *x, set_linear_system_fn *solver_linear_system, set_problem_fn **functions)
+#define SET_NONLINEAR_SYSTEM_SOLVER(name) EXPORT_FN double* name(double *J, double *f, const int n, set_linear_system_fn *solver_linear_system, set_problem_fn **functions)
 typedef SET_NONLINEAR_SYSTEM_SOLVER(set_nonlinear_system_fn);
 
 struct nonlinear_system_data
 {
     void *handle;                       // Handle to the library that solves a linear system
     char *method_name;                  // Name of the solver method
+    double *x;                          // Solution of the problem
     set_nonlinear_system_fn *solver;    // Pointer to the solver function
 };
 
