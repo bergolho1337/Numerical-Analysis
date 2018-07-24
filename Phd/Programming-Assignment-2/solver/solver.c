@@ -12,8 +12,10 @@ struct solver_data* new_solver_data (int argc, char *argv[])
 
     s->linear_system_solver = new_linear_system(s->linear_system_solver_id);
 
+    s->nonlinear_system_solver = new_nonlinear_system(s->nonlinear_system_solver_id);
+
+    //DEBUG
     /*
-    DEBUG
     s->linear_system_solver->n = 4;
 
     s->linear_system_solver->A = (double*)malloc(sizeof(double)*4*4);
@@ -41,14 +43,20 @@ struct solver_data* new_solver_data (int argc, char *argv[])
     s->linear_system_solver->b[3] = 4.000000000000;
 
     s->linear_system_solver->x = (double*)malloc(sizeof(double)*4);
-    s->linear_system_solver->solver(s->linear_system_solver->A,s->linear_system_solver->b,s->linear_system_solver->n,s->linear_system_solver->x);
+    //s->linear_system_solver->solver(s->linear_system_solver->A,s->linear_system_solver->b,s->linear_system_solver->n,s->linear_system_solver->x);
     
-    printLinearSystem(s->linear_system_solver);     // DEBUG
-    for (int i = 0; i < 4; i++)
-        printf("%lf\n",s->linear_system_solver->x[i]);
-    */
+    //printLinearSystem(s->linear_system_solver);     // DEBUG
+    //for (int i = 0; i < 4; i++)
+    //    printf("%lf\n",s->linear_system_solver->x[i]);
     
+    s->nonlinear_system_solver->solver(s->linear_system_solver->A,\
+                                    s->linear_system_solver->b,\
+                                    s->linear_system_solver->n,\
+                                    s->linear_system_solver->x,\
+                                    s->linear_system_solver->solver,\
+                                    s->problem->functions);
         
+    */
     return s;
 }
 
@@ -59,10 +67,21 @@ void free_solver (struct solver_data *s)
 
     if (s->linear_system_solver)
         free_linear_system(s->linear_system_solver);
+
+    if (s->nonlinear_system_solver)
+        free_nonlinear_system(s->nonlinear_system_solver);
     
     free(s);
-    // TO DO
-    // free_nonlinear_system
+}
+
+void solve_problem (struct solver_data *s)
+{
+    s->nonlinear_system_solver->solver(s->linear_system_solver->A,\
+                                    s->linear_system_solver->b,\
+                                    s->problem->neq,\
+                                    s->linear_system_solver->x,\
+                                    s->linear_system_solver->solver,\
+                                    s->problem->functions);
 }
 
 void Usage (int argc, char *argv[])

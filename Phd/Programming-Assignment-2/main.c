@@ -29,6 +29,8 @@ int main (int argc, char *argv[])
 
     struct solver_data *solver = new_solver_data(argc,argv);
     
+    solve_problem(solver);
+
     free_solver(solver);
 
     return 0;

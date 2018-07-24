@@ -18,11 +18,11 @@ typedef GET_PROBLEM_EQUATIONS(get_problem_equations_fn);
 
 struct problem_data
 {
-    void *handle;                   // Handle to the library of problems
+    void *handle;                   // Handle to the library that stores the equations of the problem
     char *problem_name;             // Problem name
-    char *library_path;             // Path to the library of problems
+    char *library_path;             // Path to the library
     unsigned int neq;               // Number of equations of the problem
-    set_problem_fn **functions;     // Array of pointers to the functions of the problem
+    set_problem_fn **functions;     // Array of pointers to the functions(equations) of the problem
 };
 
 // Constructor and destructor

@@ -86,7 +86,7 @@ set_problem_fn** getFunctions (void *handle, const char *library_path, const uns
     }
     else
     {
-        fprintf(stdout,"[+] Problem library \"%s\" open with sucess\n",library_path);
+        fprintf(stdout,"\n[+] Problem library \"%s\" open with sucess\n",library_path);
     }
     
     char function_name[20];

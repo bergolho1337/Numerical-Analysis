@@ -54,7 +54,7 @@ set_linear_system_fn* getMethodFunction (void *handle, const int linear_system_i
     }
     else
     {
-        fprintf(stdout,"[+] Linear system library \"%s\" open with sucess\n",library_path);
+        fprintf(stdout,"\n[+] Linear system library \"%s\" open with sucess\n",library_path);
     }
 
     set_linear_system_fn *method_fn = dlsym(handle,method_name);
