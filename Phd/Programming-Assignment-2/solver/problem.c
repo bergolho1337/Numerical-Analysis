@@ -22,6 +22,14 @@ void free_problem (struct problem_data *p)
 
     if (p->functions)
         free(p->functions);
+
+    //if (p->library_path)
+    //    free(p->library_path);
+    
+    //if (p->problem_name)
+    //    free(p->problem_name);
+    
+    free(p);
 }
 
 char* getProblemName (const int problem_id)

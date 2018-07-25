@@ -14,6 +14,14 @@ void free_nonlinear_system (struct nonlinear_system_data *nls)
 {
     if (nls->handle)
         dlclose(nls->handle);
+
+    //if (nls->method_name)
+    //    free(nls->method_name);
+    
+    if (nls->x)
+        free(nls->x);
+    
+    free(nls);
 }
 
 char *getNonlinearMethodName (const int nonlinear_system_id)
@@ -46,12 +54,12 @@ set_nonlinear_system_fn* getNonlinearMethodFunction (void *handle, const int non
     set_nonlinear_system_fn *method_fn = dlsym(handle,method_name);
     if (dlerror() != NULL)  
     {
-        fprintf(stderr, "[Nonlinear-System-Solver] %s function not found in the provided nonlinear system library\n",method_name);
+        fprintf(stderr, "[Nonlinear-System-Solver] \"%s\" function not found in the provided nonlinear system library\n",method_name);
         exit(EXIT_FAILURE);
     }
     else
     {
-        fprintf(stdout, "[Nonlinear-System-Solver] Using %s method to solve the nonlinear system\n",method_name);
+        fprintf(stdout, "[Nonlinear-System-Solver] Using \"%s\" method to solve the nonlinear system\n",method_name);
     }
     return method_fn;
 }

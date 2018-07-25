@@ -39,9 +39,12 @@ double* NewtonFiniteDifference (double *J, double *f, const int n,\
         updateSolution(x,s,n);
 
         iter++;
-    }while(!hasConverged(x,functions,n,iter));
+    }while(!hasConverged2(s,n,iter));
     
     printCurrentSolution(x,n,functions,iter);
+    
+    free(J);
+    free(f);
     
     return x;
 }
@@ -92,6 +95,8 @@ void buildJacobian_FiniteDifferences (double *J, double *x, const int n, set_pro
 
 }
 
+// Check the convergeance criterion by the number of iterations and by checking
+// the residue of the system when we apply the current solution 'x'
 int hasConverged (const double *x, set_problem_fn **functions, const int n, const int iter)
 {
     if (iter < MAX_ITER)
@@ -105,7 +110,7 @@ int hasConverged (const double *x, set_problem_fn **functions, const int n, cons
             fprintf(stderr,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             exit(EXIT_FAILURE);
         }
-        if (residue < EPSILON)
+        if (residue < TOLERANCE)
             return 1;
         else
             return 0;
@@ -115,6 +120,40 @@ int hasConverged (const double *x, set_problem_fn **functions, const int n, cons
         return 1;
     }
     
+}
+
+// Check convergeance criterion by number of iterations and by checking
+// the norm of the update vector.
+int hasConverged2 (const double *s, const int n, const int iter)
+{
+    if (iter < MAX_ITER)
+    {
+        double residue = calcNorm(s,n);
+        if (isnan(residue))
+        {
+            fprintf(stderr,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            fprintf(stderr,"[Nonlinear-System-Solver] DANGER! Iter = %d\n",iter);
+            fprintf(stderr,"There is a problem with the method!\n");
+            fprintf(stderr,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+            exit(EXIT_FAILURE);
+        }
+        if (residue < TOLERANCE)
+            return 1;
+        else
+            return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+double calcNorm (const double *v, const int n)
+{
+    double norm = 0.0;
+    for (int i = 0; i < n; i++)
+        norm += v[i]*v[i];
+    return sqrt(norm);
 }
 
 double calcResidue (const double *x, const int n, set_problem_fn **functions)
@@ -180,9 +219,9 @@ void printTypeFiniteDifference ()
 {
     switch (FINITE_DIFFERENCE)
     {
-        case 0: fprintf(stdout,"[Nonlinear-System-Solver] Using Forward Finite Difference to approximate the derivatives\n");
+        case 0: fprintf(stdout,"[Nonlinear-System-Solver] Using \"Forward Finite Difference\" to approximate the derivatives\n");
                 break;
-        case 1: fprintf(stdout,"[Nonlinear-System-Solver] Using Central Finite Difference to approximate the derivatives\n");
+        case 1: fprintf(stdout,"[Nonlinear-System-Solver] Using \"Central Finite Difference\" to approximate the derivatives\n");
                 break;
     }
 }

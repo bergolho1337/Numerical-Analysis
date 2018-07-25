@@ -29,9 +29,10 @@ int hasConverged (const double *A, const double *b, const double *x, const int n
         if (isnan(residue))
         {
             fprintf(stderr,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-            fprintf(stderr,"[Linear-System-Solver] DANGER! Iter = %d\n",iter);
+            fprintf(stderr,"[Linear-System-Solver] DANGER! Iter = %d || Residue = %.10lf\n",iter,residue);
             fprintf(stderr,"There is a problem with the method!\n");
             fprintf(stderr,"Check if the matrix is not singular!\n");
+            fprintf(stderr,"If you are using Jacobi or Gauss_Seidel check if the matrix is diagonal dominant!\n");
             fprintf(stderr,"If you are using Conjugate Gradient check if the matrix is symmetric and positive definite!\n");
             fprintf(stderr,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
             exit(EXIT_FAILURE);
@@ -52,9 +53,9 @@ void checkSolution (const double *A, const double *b, const double *x, const int
     double residue = calcResidue(A,b,x,n);
     if (residue >= EPSILON)
     {
-        fprintf(stderr,"************************************************\n");
-        fprintf(stderr,"[Linear-System-Solver] ERROR ! The method has not converged !\n");
-        fprintf(stderr,"************************************************\n");
+        fprintf(stderr,"*******************************************************************************************\n");
+        fprintf(stderr,"[Linear-System-Solver] ERROR ! The method has not converged ! Iterations = %d\n",iter);
+        fprintf(stderr,"*******************************************************************************************\n");
         exit(EXIT_FAILURE);
     }
     //fprintf(stdout,"[Linear-System-Solver] Number of iterations = %d\n",iter);

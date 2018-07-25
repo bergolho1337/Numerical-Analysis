@@ -2,7 +2,7 @@
 
 double f1 (const double x[])
 {
-    return (x[0]) + (x[1]);
+    return (x[0]) + (x[1]) - 2.0f;
 }
 
 double f2 (const double x[])

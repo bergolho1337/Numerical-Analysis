@@ -1,5 +1,4 @@
 - Build the Non-Linear System Solver library
-    - Implement first the Newton method with Finite Differences (there are notes on the notebook)
-    - Next implement the Jacobi and Gauss_Seidel iterations (they look simple ...)
-    - The Newton method with Analitical Derivatives should introduce a new array on the problem_data
+    - Next implement the Jacobi and Gauss_Seidel iterations
+    - When implementing the Newton method with Analitical Derivatives should introduce a new array on the problem_data
         - set_problem_fn **derivatives

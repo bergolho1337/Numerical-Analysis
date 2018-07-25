@@ -38,6 +38,23 @@ void solve_problem (struct solver_data *s)
                                     s->problem->neq,\
                                     s->linear_system_solver->solver,\
                                     s->problem->functions);
+
+    checkAnswer(s->nonlinear_system_solver->x,s->problem->neq,s->problem->functions);
+}
+
+void checkAnswer (const double *x, const int n, set_problem_fn **f)
+{
+    fprintf(stdout,"==============================================================================\n");
+    fprintf(stdout,"[!] Checking solution for (");
+    for (int i = 0; i < n-1; i++)
+        fprintf(stdout,"%.10lf,",x[i]);
+    fprintf(stdout,"%.10lf)\n",x[n-1]);
+    fprintf(stdout,"==============================================================================\n");
+
+    for (int i = 0; i < n; i++)
+        fprintf(stdout,"Function %d = %e\n",i+1,f[i](x));
+
+    fprintf(stdout,"==============================================================================\n");
 }
 
 void Usage (int argc, char *argv[])

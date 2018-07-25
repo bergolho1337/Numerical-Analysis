@@ -6,7 +6,7 @@
 #include <math.h>
 
 const int MAX_ITER = 500;           // Maximum number of iterations
-const double EPSILON = 1.0e-05;     // Tolerance of iterative method
+const double EPSILON = 1.0e-08;     // Tolerance of iterative method
 const int PRECONDITIONER = 0;       // Flag to set the Jacobi preconditioner
 
 // Solver of Linear Systems

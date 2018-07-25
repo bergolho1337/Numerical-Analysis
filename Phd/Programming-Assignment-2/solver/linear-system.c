@@ -20,6 +20,9 @@ void free_linear_system (struct linear_system_data *ls)
     if (ls->handle)
         dlclose(ls->handle);
 
+    //if (ls->method_name)
+    //    free(ls->method_name);
+
     if (ls->A)
         free(ls->A);
 
@@ -28,6 +31,8 @@ void free_linear_system (struct linear_system_data *ls)
 
     if (ls->x)
         free(ls->x);
+    
+    free(ls);
 }
 
 char *getMethodName (const int linear_system_id)

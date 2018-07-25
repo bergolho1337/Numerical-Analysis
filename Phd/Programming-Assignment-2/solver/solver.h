@@ -24,5 +24,6 @@ void solve_problem (struct solver_data *s);
 
 // Helper functions
 void Usage (int argc, char *argv[]);
+void checkAnswer (const double *x, const int n, set_problem_fn **f);
 
 #endif
