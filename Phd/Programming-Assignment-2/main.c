@@ -16,6 +16,18 @@
 // make the functions of each part of the project more readable and easy to 
 // find and edit.
 // ---------------------------------------------------------------------------
+// How to build and run this project:
+//
+//  Pre-Requisites:
+//      1) UNIX like system;
+//      2) CMake
+//      3) C Compiler (gcc or clang)
+//
+// 1) Execute the compilation script 
+//      $ ./recompile_project.sh
+// 2) Execute the program with
+//      $ ./bin/Assignment2 
+// ---------------------------------------------------------------------------
 #include <stdio.h>
 #include "solver/solver.h"
 
