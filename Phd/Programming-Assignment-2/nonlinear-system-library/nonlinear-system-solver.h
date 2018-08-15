@@ -20,7 +20,7 @@ typedef SET_PROBLEM_TYPE(set_problem_fn);
 const int MAX_ITER = 100;           // Maximum number of iterations
 const double TOLERANCE = 1.0e-08;     // Tolerance of iterative method
 const int REBUILD_JACOBIAN = 1;     // Rate which the Jacobian matrix will be rebuilted
-const int GUESS_VECTOR = 1;         // Initial guess vector 
+const int GUESS_VECTOR = 3;         // Initial guess vector 
 const double H = 0.0001;             // Size of the finite difference aproximation
 const int FINITE_DIFFERENCE = 1;    // Type of finite difference
 

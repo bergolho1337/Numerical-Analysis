@@ -73,6 +73,7 @@ void Usage (int argc, char *argv[])
     fprintf(stderr,"\t8 = Problem 8\n");
     fprintf(stderr,"\t9 = Problem 9\n");
     fprintf(stderr,"\t10 = Problem 10\n");
+    fprintf(stderr,"\t11 = Problem 11\n");
     fprintf(stderr,"<linear_system_method_id> = Linear System Solver identifier\n");
     fprintf(stderr,"\t1 = Jacobi\n");
     fprintf(stderr,"\t2 = Gauss-Seidel\n");
