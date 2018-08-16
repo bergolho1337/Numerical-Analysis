@@ -44,6 +44,10 @@ LinearSystem::LinearSystem (int argc, char *argv[])
 
 LinearSystem::~LinearSystem ()
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Freeing memory ..." << endl;
     free(A[0]);
     free(A);
@@ -52,6 +56,7 @@ LinearSystem::~LinearSystem ()
     // Remembering to free the LU matrix ...
     if (method == 4) 
     {
+        assert(LU);
         free(LU[0]);
         free(LU);
     }
@@ -142,6 +147,8 @@ void LinearSystem::write ()
 
 void LinearSystem::cond ()
 {
+    assert(A);
+    
     cout << "[+] Calculating the inverse of A ..." << endl;
     double **Ainv = allocMatrix(N,N);
     double *e = allocVector(N);
@@ -152,7 +159,7 @@ void LinearSystem::cond ()
         cout << "[!] Calculting column " << k << " ..." << endl;
         
         buildElementaryVector(e,k,N);
-        CG(A,e,v,N);
+        BiCG(A,e,v,N);
         insertColumnMatrix(Ainv,v,k,N);
         
         cout << endl;
@@ -216,6 +223,10 @@ void LinearSystem::solve ()
 // Solves an Inferior Triangular linear system
 void ForwardSubstitution (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Forward Substitution ..." << endl;
     x[0] = b[0] / A[0][0];
     for (int i = 1; i < N; i++)
@@ -230,6 +241,10 @@ void ForwardSubstitution (double **A, double *b, double *x, const int N)
 // Solves an Superior Triangular linear system
 void BackwardSubstitution (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Backward Substitution ..." << endl;
     x[N-1] = b[N-1] / A[N-1][N-1];
     for (int i = N-2; i >= 0; i--)
@@ -262,6 +277,10 @@ void reduceToRowEchelonForm (double **A, double *b, const int N)
 // Solves a general linear system WITHOUT partial pivoting
 void GaussianElimination (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Gaussian Elimination ..." << endl;
     // A[0][0] is the pivot element
     // TO DO: include partial pivoting
@@ -321,6 +340,11 @@ void switchLines (double **LU, int pivot[], const int pivot_line, const int i, c
 // LU Decomposition with partial pivoting
 void LUDecomposition (double **A, double **LU, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(LU);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using LU Decomposition with partial pivoting ..." << endl;
 
     // Copy the matrix A to LU
@@ -393,6 +417,10 @@ void LUDecomposition (double **A, double **LU, double *b, double *x, const int N
 
 void Jacobi (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Jacobi ..." << endl;
     int iter = 0;
     double sigma;
@@ -427,6 +455,10 @@ void Jacobi (double **A, double *b, double *x, const int N)
 
 void Gauss_Seidel (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Gauss-Seidel ..." << endl;
     int iter = 0;
     double sigma;
@@ -459,6 +491,10 @@ void Gauss_Seidel (double **A, double *b, double *x, const int N)
 
 void CG (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Conjugate Gradient ..." << endl;
     const double TOL = 1.0e-16;
     int iter = 0;
@@ -530,6 +566,10 @@ void CG (double **A, double *b, double *x, const int N)
 
 void BiCG (double **A, double *b, double *x, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     cout << "[+] Solving linear system using Biconjugate Gradient ..." << endl;
     const double TOL = 1.0e-16;
     int iter = 0;
@@ -650,6 +690,10 @@ void insertColumnMatrix (double **A, double *v, const int k, const int N)
 
 bool checkSolution (double **A, const double *x, const double *b, const int N)
 {
+    assert(A);
+    assert(x);
+    assert(b);
+
     double residue = calcResidue(A,x,b,N);
     cout << "Norm of the residue = " << setprecision(20) << residue << endl;
     cout << PRINT_LINE << endl;
@@ -738,10 +782,10 @@ bool refineSolution (double **A, double *x, double *b, const int N)
     
     compResidue(A,x,b,r,N);
         
-        Gauss_Seidel(A,r,d,N);
-        
-        for (int i = 0; i < N; i++)
-            x[i] += d[i];
+    Gauss_Seidel(A,r,d,N);
+    
+    for (int i = 0; i < N; i++)
+        x[i] += d[i];
 
     bool ok = checkSolution(A,x,b,N);
 
