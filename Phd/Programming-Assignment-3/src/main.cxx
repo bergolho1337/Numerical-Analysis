@@ -22,6 +22,10 @@ int main (int argc, char *argv[])
 
     ls->solve();
 
+    ls->write();
+
+    ls->cond();
+
     delete ls;
 
     return 0;

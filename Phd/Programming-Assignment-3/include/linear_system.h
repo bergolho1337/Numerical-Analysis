@@ -35,8 +35,9 @@ public:
     void readRHS (const char fname[]);
     void printRHS ();
 
-    void solve ();
-    void refine ();
+    void solve ();              // Solve the linear system using the specified method
+    void cond ();               // Calculate the condition number of the system
+    void write ();              // Write the solution of the system to a file
 
 };
 
@@ -62,10 +63,15 @@ void choosePivot (double **LU, int &pivot_line, double &Amax, const int i, const
 void reduceToRowEchelonForm (double **A, double *b, const int N);
 void switchLines (double **LU, int pivot[], const int pivot_line, const int i, const int N);
 void copyMatrixLU (double **A, double **LU, const int N);
+void buildElementaryVector (double *e, const int k, const int N);
+void insertColumnMatrix (double **A, double *v, const int k, const int N);
 
 void Usage (const char pname[]);
 void print (const char name[], double *v, const int N);
 
 double** allocMatrix (const int n, const int m);
+
+void MatrixMatrixMultiplication (double **A, double **B, const int N);
+double calcMatrixNormInf (double **A, const int N);
 
 #endif

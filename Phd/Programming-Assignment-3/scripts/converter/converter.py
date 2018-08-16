@@ -34,24 +34,24 @@ def writeMatrix (A):
     rows = A.shape[0]
     cols = A.shape[1]
 
-    file = open("A.mtx","w")
+    file = open("output/A.mtx","w")
     file.write("%%MatrixMarket matrix coordinate real general\n")
     file.write("%d %d %d\n" % (rows,cols,rows*cols))
     for i in range(rows):
         for j in range(cols):
             file.write("%d %d %g\n" % (i+1,j+1,A[i][j]))
     file.close()
-    print("[+] Matrix saved sucessfully in file:> \"A.mtx\"")
+    print("[+] Matrix saved sucessfully in file:> \"output/A.mtx\"")
 
 def writeRHS (b):
     size = b.shape[0]
 
-    file = open("b.mtx","w")
+    file = open("output/b.mtx","w")
     file.write("%%MatrixMarket matrix array real general\n")
     file.write("%d %d\n" % (size,1))
     for i in range(size):
         file.write("%g\n" % (b[i]))
-    print("[+] RHS saved sucessfully in file:> \"b.mtx\"")
+    print("[+] RHS saved sucessfully in file:> \"output/b.mtx\"")
 
 if (len(sys.argv) != 3):
     print("----------------------------------------")

@@ -40,28 +40,6 @@ LinearSystem::LinearSystem (int argc, char *argv[])
     // Read RHS
     readRHS(argv[2]);
     //printRHS();
-
-    // Testing a solution
-    /*
-    cout << "Testing solution vector" << endl;
-    double x[N];
-    for (int i = 0; i < N; i++)
-    {
-        x[i] = 101.0;
-        cout << x[i] << endl;
-    }
-        
-
-    double residue = 0.0;
-    for (int i = 0; i < N; i++)
-    {
-        double sum = 0.0;
-        for (int j = 0; j < N; j++)
-            sum += A[i][j]*x[j];
-        residue += pow(b[i] - sum,2);
-    }
-    cout << "Residue = " << sqrt(residue) << endl;
-    */
 }
 
 LinearSystem::~LinearSystem ()
@@ -152,6 +130,51 @@ void LinearSystem::printRHS ()
 {
     for (int i = 0; i < N; i++)
         cout << fixed << setprecision(10) << b[i] << endl;
+}
+
+void LinearSystem::write ()
+{
+    ofstream out("scripts/error/solution.dat");
+    for (int i = 0; i < N; i++)
+        out << fixed << setprecision(10) << x[i] << endl;
+    out.close();
+}
+
+void LinearSystem::cond ()
+{
+    cout << "[+] Calculating the inverse of A ..." << endl;
+    double **Ainv = allocMatrix(N,N);
+    double *e = allocVector(N);
+    double *v = allocVector(N);
+    // Calculate each column of the inverse matriz by solving a linear system
+    for (int k = 0; k < N; k++)
+    {
+        cout << "[!] Calculting column " << k << " ..." << endl;
+        
+        buildElementaryVector(e,k,N);
+        CG(A,e,v,N);
+        insertColumnMatrix(Ainv,v,k,N);
+        
+        cout << endl;
+    }
+
+    // Test the inverse
+    cout << "[+] Testing A inverse ..." << endl;
+    MatrixMatrixMultiplication(A,Ainv,N);
+
+    // Calculate the infinite matrix norm of A and Ainv
+    double normA = calcMatrixNormInf(A,N);
+    double normAinv = calcMatrixNormInf(Ainv,N);
+
+    cout << PRINT_DANGER << endl;
+    cout << fixed << setprecision(10) << "Condition number = " << normA*normAinv << endl;
+    cout << PRINT_DANGER << endl;
+
+    // Free allocated memory 
+    free(Ainv[0]);
+    free(Ainv);
+    free(e);
+    free(v);    
 }
 
 void LinearSystem::solve ()
@@ -607,6 +630,24 @@ void GMRES (double **A, double *b, double *x, const int N)
     cout << "[+] Solving linear system using GMRES ..." << endl;
 }
 
+void buildElementaryVector (double *e, const int k, const int N)
+{
+    for (int i = 0; i < N; i++)
+    {
+        if (i == k)
+            e[i] = 1.0;
+        else
+            e[i] = 0.0;
+    }
+}
+
+// Copy the vector 'v' into the 'k' column of 'A'
+void insertColumnMatrix (double **A, double *v, const int k, const int N)
+{
+    for (int i = 0; i < N; i++)
+        A[i][k] = v[i];
+}
+
 bool checkSolution (double **A, const double *x, const double *b, const int N)
 {
     double residue = calcResidue(A,x,b,N);
@@ -705,6 +746,37 @@ bool refineSolution (double **A, double *x, double *b, const int N)
     bool ok = checkSolution(A,x,b,N);
 
     return ok;
+}
+
+void MatrixMatrixMultiplication (double **A, double **B, const int N)
+{
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < N; j++)
+        {
+            double value = 0.0;
+            for (int k = 0; k < N; k++)
+            {
+                value += A[i][k]*B[k][j];
+            }
+            cout << fixed << setprecision(10) << value << " "; 
+        }
+        cout << endl;
+    }
+}
+
+// Calculate the infinite norm of a matrix A
+double calcMatrixNormInf (double **A, const int N)
+{
+    double norm = 0.0;
+    for (int i = 0; i < N; i++)
+    {
+        double sum = 0.0;
+        for (int j = 0; j < N; j++)
+            sum += fabs(A[i][j]);
+        norm = max(norm,sum);
+    }
+    return norm;
 }
 
 void print (const char name[], double *v, const int N)
