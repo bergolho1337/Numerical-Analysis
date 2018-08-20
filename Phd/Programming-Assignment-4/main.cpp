@@ -22,7 +22,7 @@ using namespace std;
 
 int main (int argc, char *argv[])
 {
-    if (argc-1 != 2)
+    if (argc-1 != 3)
     {
         Usage(argc,argv);
         exit(EXIT_FAILURE);
