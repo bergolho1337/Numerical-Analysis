@@ -1,3 +1,6 @@
+#ifndef SOLVER_H
+#define SOLVER_H
+
 #include <iostream>
 #include <iomanip>
 #include <cassert>
@@ -6,7 +9,7 @@
 #include <string>
 #include <fstream>
 
-#include "lagrange.h"
+#include "interpolation.h"
 
 using namespace std;
 
@@ -22,6 +25,8 @@ private:
     double y;
 public:
     Point (double x, double y) : x(x), y(y) {}
+    double getX () { return x; }
+    double getY () { return y; }
     void print ()
     {
         cout << fixed << setprecision(10) << "(" << x << " , " << y << ")" << endl;
@@ -36,6 +41,9 @@ private:
     int max_id;
 public:
     Interval (int degree, int minid, int maxid) : degree(degree), min_id(minid), max_id(maxid) {}
+    int getDegree () { return degree; }
+    int getMinId () { return min_id; }
+    int getMaxId () { return max_id; }
     void print ()
     {
         cout << "Degree = " << degree << endl;
@@ -52,6 +60,7 @@ private:
     string points_filepath;
     vector<Point> points;
     vector<Interval> intervals;
+    set_interpolation_fn *interpolation_solver;
 
     void read_points ();
     void read_intervals ();
@@ -65,3 +74,5 @@ public:
 };
 
 void Usage (int argc, char *argv[]);
+
+#endif

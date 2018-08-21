@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def readPoints (filename):
-    filename = sys.argv[1]
     file = open(filename,"r")
 
     line = file.readline()
@@ -21,19 +20,30 @@ def readPoints (filename):
 
     return x, y
 
+def readInterpolatePoints (filename):
+    z = np.loadtxt(filename)
+    return z
+
 def showPoints (x,y):
+    plt.ylim(0,10)
     plt.scatter(x,y)
-    plt.ylim(0,30)
+
+def showInterpolatePoints (z):
+    plt.ylim(0,20)
+    plt.plot(z[:,0],z[:,1])
+    plt.grid() 
     plt.show()
-
-
 
 def main():
 
-    filename = sys.argv[1]
+    points_filename = sys.argv[1]
+    interpolate_filename = sys.argv[2]
     
-    x,y = readPoints(filename)
+    x,y = readPoints(points_filename)
+    z = readInterpolatePoints(interpolate_filename)
+
     showPoints(x,y)
+    showInterpolatePoints(z)
 
 if __name__ == "__main__":
     main()

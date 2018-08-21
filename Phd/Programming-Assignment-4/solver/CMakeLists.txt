@@ -1,4 +1,5 @@
 set(SOURCE_FILES_SOLVER solver.h solver.cpp
+                        interpolation.h interpolation.cpp
                         lagrange.h lagrange.cpp
                         newton.h newton.cpp
                         csplines.h csplines.cpp)

@@ -8,6 +8,7 @@
 //      1) UNIX like system;
 //      2) CMake
 //      3) C Compiler (gcc or clang)
+//      4) Python enviroment with Matplotlib installed
 //
 // 1) Execute the compilation script 
 //      $ ./recompile_project.sh
