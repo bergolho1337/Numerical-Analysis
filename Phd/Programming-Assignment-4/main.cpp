@@ -28,13 +28,11 @@ int main (int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    cout << "Ok" << endl;
+    Solver *solver = new Solver(argc,argv);
 
-    //struct solver_data *solver = new_solver_data(argc,argv);
-    
-    //solve_problem(solver);
+    solver->interpolate();
 
-    //free_solver(solver);
+    delete solver;
 
     return 0;
 }
