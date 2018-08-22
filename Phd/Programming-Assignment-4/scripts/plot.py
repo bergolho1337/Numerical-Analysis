@@ -32,7 +32,10 @@ def showInterpolatePoints (z):
     plt.ylim(0,20)
     plt.plot(z[:,0],z[:,1])
     plt.grid() 
-    plt.show()
+    #plt.show()
+
+def writeOutput (x,y,z):
+    plt.savefig("output.pdf")
 
 def main():
 
@@ -44,6 +47,8 @@ def main():
 
     showPoints(x,y)
     showInterpolatePoints(z)
+
+    writeOutput(x,y,z)
 
 if __name__ == "__main__":
     main()

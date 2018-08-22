@@ -11,11 +11,23 @@ void Usage (int argc, char *argv[])
     std::cout << "\t2 = Cubic Splines" << std::endl;
     std::cout << "-----------------------------------------------------------------------" << std::endl;
     std::cout << "<id_interval> = Type of the interval" << std::endl;
-    std::cout << "\t0 = Default (1 polynomium for the whole interval)" << std::endl;
+    std::cout << "\t0 = Default (the set of points is consider a single interval)" << std::endl;
     std::cout << "\t1 = Prescribed" << std::endl;
     std::cout << "-----------------------------------------------------------------------" << std::endl;
     std::cout << "<points_file> = File with points to be interpolated" << std::endl;
     std::cout << "-----------------------------------------------------------------------" << std::endl;
+    std::cout << "Examples:" << std::endl;
+    std::cout << "\tLagrange polynomials with default interval:" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 0 ../inputs/points_1.txt\n" << std::endl;
+    std::cout << "\tLagrange polynomials with prescribed interval:" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 1 ../inputs/points_2.txt" << std::endl;
+    std::cout << "\t\t2" << std::endl;
+    std::cout << "\t\t0 2" << std::endl;
+    std::cout << "\t\t2 4\n" << std::endl;
+    std::cout << "\tCubic splines with default interval:" << std::endl;
+    std::cout << "$ " << argv[0] << " 2 0 ../inputs/points_2.txt\n" << std::endl;
+    std::cout << "-----------------------------------------------------------------------" << std::endl;
+    
 }
 
 Solver::Solver (int argc, char *argv[])
