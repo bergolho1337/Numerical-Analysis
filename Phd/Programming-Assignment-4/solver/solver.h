@@ -64,6 +64,8 @@ private:
 
     void read_points ();
     void read_intervals ();
+    void interpolate_default ();
+    void calc_second_derivative_csplines ();
 public:
     Solver (int argc, char *argv[]);
     ~Solver ();

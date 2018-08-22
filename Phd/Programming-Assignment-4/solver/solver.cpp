@@ -27,6 +27,12 @@ Solver::Solver (int argc, char *argv[])
     read_points();
     //print_points();
 
+    // TO DO: Implement the CSplines using prescribed points and eliminate this if statement
+    if (polynomium_type == 2 && interval_type == 1)
+    {
+        print_splines_message("Prescribed interval is not implemented for this method setting back to default configuration");
+        interval_type = 0;
+    }
     read_intervals();
     //print_intervals();
 
@@ -37,6 +43,8 @@ Solver::Solver (int argc, char *argv[])
 Solver::~Solver ()
 {
     cout << "[!] Cleaning Solver ..." << endl;
+    if (polynomium_type == 2)
+        cleanup_second_derivative();
 }
 
 void Solver::interpolate ()
@@ -44,7 +52,7 @@ void Solver::interpolate ()
     switch (polynomium_type)
     {
         case 0: {
-                    cout << "[!] Using Lagrange polynomials ..." << endl;             
+                    cout << "[!] Using Lagrange polynomials ..." << endl;
                     break;
                 }
         case 1: {
@@ -53,10 +61,15 @@ void Solver::interpolate ()
                 }
         case 2: {
                     cout << "[!] Using Cubic Splines polynomials ..." << endl;
+                    calc_second_derivative_csplines();
                     break;
                 }
     }
+    interpolate_default();
+}
 
+void Solver::interpolate_default ()
+{
     // TO DO: Avoid doing this copy ...
     int n = points.size();
     double x[n], y[n];
@@ -80,14 +93,8 @@ void Solver::interpolate ()
         double b = x[maxid];
         double h = (b - a) / NEVAL;
 
-        cout << "Min_id = " << minid << endl;
-        cout << "Max_id = " << maxid << endl;
-        cout << "x_min = " << a << endl;
-        cout << "x_max = " << b << endl;
-        cout << "Degree = " << degree << endl;
-
         // Pass through the interval
-        for (int k = 0; k < NEVAL; k++)
+        for (int k = 0; k < NEVAL+1; k++)
         {
             double z = a + k*h;
             double value = interpolation_solver(x,y,minid,maxid,degree,z);
@@ -96,6 +103,21 @@ void Solver::interpolate ()
     }
     
     out.close();
+}
+
+void Solver::calc_second_derivative_csplines ()
+{
+
+    // TO DO: Avoid doing this copy ...
+    int n = points.size();
+    double x[n], y[n];
+    for (int i = 0; i < n; i++)
+    {
+        x[i] = points[i].getX();
+        y[i] = points[i].getY();
+    }
+
+    calc_natural_splines(x,y,n);
 }
 
 void Solver::read_points ()
@@ -120,7 +142,7 @@ void Solver::read_intervals ()
     switch (interval_type)
     {
         case 0: {
-                    cout << "[!] Using the a default interval ..." << endl;
+                    cout << "[!] Using a default interval ..." << endl;
 
                     Interval i(points.size(),0,points.size()-1);
                     intervals.push_back(i);
