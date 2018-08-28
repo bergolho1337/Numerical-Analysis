@@ -28,7 +28,7 @@ int main (int argc, char *argv[])
 
     struct solver_data *solver = new_solver_data(argc,argv);
 
-    //integrate(solver);
+    integrate(solver);
 
     free_solver_data(solver);
 

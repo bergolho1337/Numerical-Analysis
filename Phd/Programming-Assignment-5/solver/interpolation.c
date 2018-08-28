@@ -11,7 +11,7 @@ struct interpolation_data* new_interpolation_data (const int id, const char poin
     //print_intervals(i);
 
     read_polynomium_type(i,id);
-    i->function(NULL,NULL,0,2,3.0);
+    //i->function(NULL,NULL,0,2,3.0);
 
     return i;
 }
@@ -77,7 +77,7 @@ void read_intervals (struct interpolation_data *i, const char interval_filename[
     }
 
     // Allocate intervals
-    i->intervals = (struct interval_data*)malloc(sizeof(struct interval_data));
+    i->intervals = (struct interval_data*)malloc(sizeof(struct interval_data)*i->ninterval);
 
     // Read values from the intervals
     for (int j = 0; j < i->ninterval; j++)
@@ -92,6 +92,7 @@ void read_intervals (struct interpolation_data *i, const char interval_filename[
     }
 
     fclose(file);
+
 }
 
 void read_polynomium_type (struct interpolation_data *i, const int id)
