@@ -1,10 +1,9 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "interpolation.h"
 //#include "newton_cotes.h"
-//#include "interpolation.h"
+
 
 /*
 class Interval;
@@ -75,7 +74,7 @@ struct solver_data
     int interpolation_id;               // Interpolation identifier
     int newton_cotes_id;                // Newton-Cotes rule identifier
 
-    //struct interpolation_data *interpolation;                   // Pointer to the interpolation data structure
+    struct interpolation_data *interpolation;                   // Pointer to the interpolation data structure
     //struct newton_cotes_data *newton_cotes_solver;              // Pointer to the Newton-Cotes structure
 };
 

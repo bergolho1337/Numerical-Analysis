@@ -27,18 +27,19 @@ struct solver_data* new_solver_data (int argc, char *argv[])
 {
     struct solver_data *s = (struct solver_data*)malloc(sizeof(struct solver_data));
     s->interpolation_id = atoi(argv[1]);
-    
+
+    s->interpolation = new_interpolation_data(s->interpolation_id,argv[2],argv[3]);
 
     s->newton_cotes_id = atoi(argv[4]);
-
-    fprintf(stdout,"Interpolation id = %d\n",s->interpolation_id);
-    fprintf(stdout,"Newton cotes id = %d\n",s->newton_cotes_id);
 
     return s;
 }
 
 void free_solver_data (struct solver_data *s)
 {
+    if (s->interpolation)
+        free_interpolation_data(s->interpolation);
+
     free(s);
 }
 
