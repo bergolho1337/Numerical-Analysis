@@ -39,6 +39,7 @@ double Simpson13 (const int minid, const int maxid, struct interpolation_data *i
     // Calculate limits of the interval
     double a = xpts[minid];
     double b = xpts[maxid];
+    fprintf(stdout,"[Newton-Cotes] a = %.10lf || b = %.10lf\n",a,b);
 
     // Get the interpolation function
     set_interpolation_fn *f = idata->function;
@@ -58,6 +59,7 @@ double Simpson13 (const int minid, const int maxid, struct interpolation_data *i
     }
     total_int *= (h / 3.0);
 
+    fprintf(stdout,"\tIntegral = %.10lf\n",total_int);
     return total_int;
 }
 
@@ -70,6 +72,7 @@ double Simpson38 (const int minid, const int maxid, struct interpolation_data *i
     // Calculate limits of the interval
     double a = xpts[minid];
     double b = xpts[maxid];
+    fprintf(stdout,"[Newton-Cotes] a = %.10lf || b = %.10lf\n",a,b);
 
     // Get the interpolation function
     set_interpolation_fn *f = idata->function;
@@ -89,6 +92,7 @@ double Simpson38 (const int minid, const int maxid, struct interpolation_data *i
     }
     total_int *= (3.0 * h / 8.0);
 
+    fprintf(stdout,"\tIntegral = %.10lf\n",total_int);
     return total_int;
 }
 
