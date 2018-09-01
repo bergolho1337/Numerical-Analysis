@@ -1,0 +1,46 @@
+
+[Interpolation] Interpolation library "./shared-libs/libdefault-interpolation-solver.so" open with sucess
+[Interpolation] Using Lagrange method to interpolate
+
+[Newton-Cotes] Newton-Cotes library "./shared-libs/libdefault-newton-cotes-solver.so" open with sucess
+[Newton-Cotes] Using the Simpson13 rule to integrate the polynomium
+
+[Solver] Calculating integral ...
+--------------------------------
+Interval 0
+[Newton-Cotes] a = 1.0000000000 || b = 2.0000000000
+	Integral = 3.3486297016
+--------------------------------
+Interval 1
+[Newton-Cotes] a = 2.0000000000 || b = 5.0000000000
+	Integral = 11.3956667284
+--------------------------------
+Interval 2
+[Newton-Cotes] a = 5.0000000000 || b = 7.0000000000
+	Integral = 8.7957786418
+--------------------------------
+Interval 3
+[Newton-Cotes] a = 7.0000000000 || b = 10.0000000000
+	Integral = 20.1671109415
+--------------------------------
+Interval 4
+[Newton-Cotes] a = 10.0000000000 || b = 17.0000000000
+	Integral = 43.9911071388
+--------------------------------
+Interval 5
+[Newton-Cotes] a = 17.0000000000 || b = 24.0000000000
+	Integral = 44.4322383677
+--------------------------------
+Interval 6
+[Newton-Cotes] a = 24.0000000000 || b = 27.7000000000
+	Integral = 20.4223510289
+--------------------------------
+Interval 7
+[Newton-Cotes] a = 27.7000000000 || b = 28.0000000000
+	Integral = 1.2595222284
+--------------------------------
+Interval 8
+[Newton-Cotes] a = 28.0000000000 || b = 30.0000000000
+	Integral = 7.8977771400
+
+[Solver] Result of the integral = 161.7101819172
