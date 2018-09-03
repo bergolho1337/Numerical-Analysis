@@ -47,6 +47,7 @@ char* getProblemName (const int problem_id)
         case 9: return "problem9";
         case 10: return "problem10";
         case 11: return "problem11";
+        case 12: return "problem12";
     }
     fprintf(stderr,"[-] ERROR! Problem identifier not found !\n");
     return NULL;
@@ -67,6 +68,7 @@ char* getLibraryPath (const int problem_id)
         case 9: return "./shared-libs/libproblem9.so";
         case 10: return "./shared-libs/libproblem10.so";
         case 11: return "./shared-libs/libproblem11.so";
+        case 12: return "./shared-libs/libproblem12.so";
     }
     fprintf(stderr,"[-] ERROR! Problem identifier not found !\n");
     return NULL;

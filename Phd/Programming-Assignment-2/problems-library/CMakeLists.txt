@@ -76,3 +76,10 @@ set(COMMON_HEADERS problem11.h)
 
 ADD_LIBRARY(problem11 ${LIB_TYPE} ${COMMON_HEADERS} ${MODEL_FILE_CPU})
 #########################################################
+
+############## PROBLEM 12 ##############################
+set(MODEL_FILE_CPU "problem12.c")
+set(COMMON_HEADERS problem12.h)
+
+ADD_LIBRARY(problem12 ${LIB_TYPE} ${COMMON_HEADERS} ${MODEL_FILE_CPU})
+#########################################################
