@@ -29,8 +29,8 @@ struct linear_system_data* new_linear_system (const int linear_system_id);
 void free_linear_system (struct linear_system_data *ls);
 
 // Auxiliary functions 
-set_linear_system_fn* getMethodFunction (void *handle, const int linear_system_id);
 char *getMethodName (const int linear_system_id);
+void setMethodFunction (struct linear_system_data *ls, const int linear_system_id);
 void printLinearSystem (struct linear_system_data *ls);
 void printMatrix (const char *name, const double *A, const int n);
 void printVector (const char *name, const double *v, const int n);

@@ -11,4 +11,4 @@ if [ ! -f $PNAME ]; then
 fi
 
 # Run valgrind to check for heap memory leaks ...
-valgrind --leak-check=full ./$PNAME $1 $2 $3
+valgrind --leak-check=full --show-leak-kinds=all ./$PNAME $1 $2 $3

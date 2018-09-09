@@ -25,7 +25,7 @@ struct least_squares_data* new_least_squares_data (const int least_squares_id);
 void free_least_squares (struct least_squares_data *ls);
 
 // Auxiliary functions 
-set_least_squares_fn* getPhiFunction (void *handle, const int least_squares_id);
+void getPhiFunction (struct least_squares_data *ls, const int least_squares_id);
 char *getPhiFunctionName (const int least_squares_id);
 
 #endif

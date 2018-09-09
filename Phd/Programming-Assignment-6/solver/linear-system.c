@@ -4,8 +4,7 @@ struct linear_system_data* new_linear_system (const int linear_system_id)
 {
     struct linear_system_data *ls = (struct linear_system_data*)malloc(sizeof(struct linear_system_data));
 
-    ls->method_name = getMethodName(linear_system_id);
-    ls->solver = getMethodFunction(ls->handle,linear_system_id);
+    setMethodFunction(ls, linear_system_id);
     
     ls->n = 0;
     ls->A = NULL;
@@ -20,8 +19,8 @@ void free_linear_system (struct linear_system_data *ls)
     if (ls->handle)
         dlclose(ls->handle);
 
-    if (ls->method_name)
-        free(ls->method_name);
+    //if (ls->method_name)
+    //    free(ls->method_name);
 
     if (ls->A)
         free(ls->A);
@@ -51,13 +50,13 @@ char *getMethodName (const int linear_system_id)
     }
 }
 
-set_linear_system_fn* getMethodFunction (void *handle, const int linear_system_id)
+void setMethodFunction (struct linear_system_data *ls, const int linear_system_id)
 {
     char *library_path = "./shared-libs/libdefault-linear-system-solver.so";
-    char *method_name = getMethodName(linear_system_id);
+    ls->method_name = getMethodName(linear_system_id);
 
-    handle = dlopen(library_path,RTLD_LAZY);
-    if (!handle) 
+    ls->handle = dlopen(library_path,RTLD_LAZY);
+    if (!ls->handle) 
     {
         fprintf(stderr,"%s\n",dlerror());
         exit(EXIT_FAILURE);
@@ -67,17 +66,17 @@ set_linear_system_fn* getMethodFunction (void *handle, const int linear_system_i
         fprintf(stdout,"\n[+] Linear system library \"%s\" open with sucess\n",library_path);
     }
 
-    set_linear_system_fn *method_fn = dlsym(handle,method_name);
+    ls->solver = dlsym(ls->handle,ls->method_name);
     if (dlerror() != NULL)  
     {
-        fprintf(stderr, "[Linear-System-Solver] %s function not found in the provided linear system library\n",method_name);
+        fprintf(stderr, "[Linear-System-Solver] %s function not found in the provided linear system library\n",ls->method_name);
         exit(EXIT_FAILURE);
     }
     else
     {
-        fprintf(stdout, "[Linear-System-Solver] Using %s method to solve the linear system\n",method_name);
+        fprintf(stdout, "[Linear-System-Solver] Using %s method to solve the linear system\n",ls->method_name);
     }
-    return method_fn;
+
 }
 
 void printLinearSystem (struct linear_system_data *ls)
