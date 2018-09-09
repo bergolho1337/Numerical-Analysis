@@ -41,6 +41,7 @@ void print_points (struct solver_data *s);
 void write_solution (struct solver_data *s);
 void write_solution_problem_1 (FILE *file, struct solver_data *s);
 void write_solution_problem_2 (FILE *file, struct solver_data *s);
+void write_solution_problem_3 (FILE *file, struct solver_data *s);
 
 
 #endif

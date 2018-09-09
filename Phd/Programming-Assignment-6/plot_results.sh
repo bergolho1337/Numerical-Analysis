@@ -7,6 +7,7 @@ if [ "$#" -ne 1 ]; then
     echo "<problem_id> = Problem identifier"
     echo "            1 - Problem 1"
     echo "            2 - Problem 2"
+    echo "            3 - Problem 3"
     echo "***********************************************"
     exit 1
 fi
@@ -22,6 +23,10 @@ if [ $1 -eq 1 ]; then
 elif [ $1 -eq 2 ]; then
     echo "[Problem 2] Generating plot ..."
 	 python ./scripts/plot_problem_2.py ./inputs/points1-problem-2.txt ./inputs/points2-problem-2.txt ./solution.dat ./solution2.dat
+    echo "[Problem 2] Done"
+else
+    echo "[Problem 3] Generating plot ..."
+    python ./scripts/plot_problem_3.py ./inputs/points-problem-3.txt ./solution.dat
     echo "[Problem 2] Done"
 fi
 

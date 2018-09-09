@@ -35,6 +35,8 @@ void Usage (int argc, char *argv[])
     fprintf(stderr,"\t\t$ ./bin/Assignment6 2 inputs/points-problem-1.txt 1 2 0\n");
     fprintf(stderr,"\tProblem 2:\n");
     fprintf(stderr,"\t\t$ ./bin/Assignment6 2 inputs/points1-problem-2.txt 2 3 0\n"); 
+    fprintf(stderr,"\tProblem 3:\n");
+    fprintf(stderr,"\t\t$ ./bin/Assignment6 2 inputs/points-problem-3.txt 3 3 0\n");
 }
 
 struct solver_data* new_solver_data (int argc, char *argv[])
@@ -237,6 +239,11 @@ void write_solution (struct solver_data *s)
     { 
         write_solution_problem_2(file,s);
     }
+    // Output for problem 3 ...
+    else
+    {
+        write_solution_problem_3(file,s);
+    }
 
     fclose(file);
 }
@@ -356,6 +363,34 @@ void write_solution_problem_2 (FILE *file, struct solver_data *s)
     double a = alpha[1];
     double b = alpha[0];
     fprintf(stdout,"\n[Solution Problem 2] f = %.10lf + %.10lf*x\n",b,a);
+
+    // Then, we calculate the linspace for the points to be plotted using the adjusted curve
+    int npoints = s->npoints;
+    double *xpts = s->x;
+    //double h = (xpts[npoints-1]-xpts[0])/NEVAL;
+    double h = (xpts[npoints-1]-xpts[0])/NEVAL;
+
+    fprintf(file,"%d\n",NEVAL);
+    // Write the adjusted curve points ...
+    for (int k = 0; k < NEVAL+1; k++)
+    {
+        double x = xpts[0] + k*h;
+
+        // Use the default g function (a line)
+        double value = a*x + b;
+
+        fprintf(file,"%.10lf %.10lf\n",x,value);
+    }
+}
+
+void write_solution_problem_3 (FILE *file, struct solver_data *s)
+{
+    double *alpha = s->linear_system->x;
+        
+    // First we need to recalculate the coefficient for the original problem
+    double a = alpha[1];
+    double b = alpha[0];
+    fprintf(stdout,"\n[Solution Problem 3] g = %.10lf + %.10lf*x\n",b,a);
 
     // Then, we calculate the linspace for the points to be plotted using the adjusted curve
     int npoints = s->npoints;
