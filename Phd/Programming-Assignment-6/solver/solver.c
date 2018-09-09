@@ -46,7 +46,7 @@ struct solver_data* new_solver_data (int argc, char *argv[])
     s->least_squares = new_least_squares_data(s->least_square_id);
     
     read_points(s);
-    print_points(s);
+    //print_points(s);
 
     return s;
 }
@@ -71,12 +71,28 @@ void free_solver_data (struct solver_data *s)
 
 void solve (struct solver_data *s)
 {
+    // ____________________________________________________________
     // Build the linear system structures
     s->linear_system->n = s->n;
-    //s->linear_system->A = build_matrix(s->n,s->least_squares);
-    //s->linear_system->b = build_rhs(s->n,s->least_squares);
-    //s->linear_system->x = (double*)malloc(sizeof(double)*s->n);
+    
+    s->linear_system->A = build_matrix(s);
+    //printMatrix("A",s->linear_system->A,s->linear_system->n);
 
+    s->linear_system->b = build_rhs(s);
+    //printVector("b",s->linear_system->b,s->linear_system->n);
+    
+    s->linear_system->x = (double*)malloc(sizeof(double)*s->n);
+
+    // ____________________________________________________________
+    // Solve the linear system
+    s->linear_system->solver(s->linear_system->A,\
+                             s->linear_system->b,\
+                             s->linear_system->n,\
+                             s->linear_system->x);
+
+    //printVector("x",s->linear_system->x,s->linear_system->n);
+
+    write_solution(s);
 }
 
 void read_points (struct solver_data *s)
@@ -100,6 +116,13 @@ void read_points (struct solver_data *s)
     }
 
     fclose(file);
+
+    // For problem 1 we need to take the natural logarithm from the y vector ... 
+    if (s->problem_id == 1)
+    {
+        for (int i = 0; i < s->npoints; i++)
+            s->y[i] = log(s->y[i]);
+    }
 }
 
 void print_points (struct solver_data *s)
@@ -115,14 +138,111 @@ void print_points (struct solver_data *s)
     }
 }
 
-double* build_matrix (const int n, struct least_squares_data *ls)
+double* build_matrix (struct solver_data *s)
 {
     // Get the reference to the phi function ...
-    set_least_squares_fn *phi_fn = ls->function;
+    int n = s->n;
+    set_least_squares_fn *phi_fn = s->least_squares->function;
+
+    // Get reference to the points dataset
+    int npoints = s->npoints;
+    double *x = s->x;
 
     // Allocate memory
     double *A = (double*)malloc(sizeof(double)*n*n);
 
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            A[i*n+j] = compute_coefficient_matrix(phi_fn,i,j,x,npoints);
+        }
+    }
 
+    return A;
+}
 
+double compute_coefficient_matrix (set_least_squares_fn *phi, const int i, const int j,\
+                            const double *x, const int npoints)
+{
+    double ret = 0.0f;
+    
+    // Compute the term by: 
+    //  sum_{i=0}^{npoints-1} phi_i(x_k) * phi_j(x_k)
+    for (int k = 0; k < npoints; k++)
+    {
+        ret += phi(x[k],i)*phi(x[k],j);
+    }
+
+    return ret;
+}
+
+double* build_rhs (struct solver_data *s)
+{
+    // Get the reference to the phi function ...
+    int n = s->n;
+    set_least_squares_fn *phi_fn = s->least_squares->function;
+
+    // Get reference to the points dataset
+    int npoints = s->npoints;
+    double *x = s->x;
+    double *y = s->y;
+
+    // Allocate memory
+    double *b = (double*)malloc(sizeof(double)*n);
+
+    for (int i = 0; i < n; i++)
+    {
+        b[i] = compute_coefficient_rhs(phi_fn,i,x,y,npoints);
+    }
+
+    return b;
+}
+
+double compute_coefficient_rhs (set_least_squares_fn *phi, const int i,\
+                            const double *x, const double *y, const int npoints)
+{
+    double ret = 0.0f;
+    
+    for (int k = 0; k < npoints; k++)
+    {
+        ret += phi(x[k],i)*y[k];
+    }   
+
+    return ret;
+}
+
+void write_solution (struct solver_data *s)
+{
+    FILE *file = fopen("solution.dat","w+");
+
+    // Output for problem 1 ...
+    if (s->problem_id == 1)
+    {
+        double *alpha = s->linear_system->x;
+        
+        // First we need to recalculate the coefficient for the original problem
+        double a = exp(alpha[0]);
+        double b = alpha[1];
+        fprintf(stdout,"\n[Solution Problem 1a] y = %.10lf * e^(%.10lf*x)\n",a,b);
+        fprintf(stdout,"[Solution Problem 1b] y >= 2000 ----> x >= %.10lf\n",(log(2000.0f) - alpha[0])/alpha[1]);
+
+        // Then, we calculate the linspace for the points to be plotted using the adjusted curve
+        int npoints = s->npoints;
+        double *xpts = s->x;
+        //double h = (xpts[npoints-1]-xpts[0])/NEVAL;
+        double h = (12.0f-xpts[0])/NEVAL;
+
+        fprintf(file,"%d\n",NEVAL);
+        // Write the adjusted curve points ...
+        for (int k = 0; k < NEVAL+1; k++)
+        {
+            double x = xpts[0] + k*h;
+            double value = a*exp(b*x);
+
+            fprintf(file,"%.10lf %.10lf\n",x,value);
+        }
+    }
+
+    fclose(file);
 }

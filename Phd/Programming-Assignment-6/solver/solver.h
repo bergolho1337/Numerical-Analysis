@@ -4,6 +4,8 @@
 #include "least-squares.h"
 #include "linear-system.h"
 
+static const int NEVAL = 500;
+
 struct solver_data
 {
     int n;                              // Number of phi functions to use
@@ -26,9 +28,14 @@ void free_solver_data (struct solver_data *s);
 
 void solve (struct solver_data *s);
 void read_points (struct solver_data *s);
-double* build_matrix (const int n, struct least_squares_data *ls);
-double* build_rhs (const int n, struct least_squares_data *ls);
+double* build_matrix (struct solver_data *s);
+double* build_rhs (struct solver_data *s);
+double compute_coefficient_matrix (set_least_squares_fn *phi, const int i, const int j,\
+                            const double *x, const int npoints);
+double compute_coefficient_rhs (set_least_squares_fn *phi, const int i,\
+                            const double *x, const double *y, const int npoints);
 
 void print_points (struct solver_data *s);
+void write_solution (struct solver_data *s);
 
 #endif
