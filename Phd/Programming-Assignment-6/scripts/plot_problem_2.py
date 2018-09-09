@@ -21,19 +21,19 @@ def readPoints (filename):
 
     return x, y
 
-def showPoints (x,y):
+def showPoints (x,y,colorname,labelname):
     #plt.ylim(0,10)
-    plt.scatter(x,y,label="dataset",marker='o',s=40)
+    plt.scatter(x,y,label=labelname,marker='o',s=40,c=colorname)
 
-def plotSolution (x,y):
+def plotSolution (x,y,colorname,labelname):
     #plt.ylim(0,10)
-    plt.plot(x,y,label="aprox")
+    plt.plot(x,y,label=labelname,c=colorname)
 
 def showOutput ():
     plt.grid()
     plt.xlabel(u"x",fontsize=15)
     plt.ylabel(u"y",fontsize=15)
-    plt.title(u"Curva ajustada por Mínimos Quadrados (Problema 1)",fontsize=14)
+    plt.title(u"Curva ajustada por Mínimos Quadrados (Problema 2)",fontsize=14)
     plt.legend(loc=0,fontsize=14)
     plt.show()
 
@@ -41,9 +41,9 @@ def writeOutput ():
     plt.grid()
     plt.xlabel(u"x",fontsize=15)
     plt.ylabel(u"y",fontsize=15)
-    plt.title(u"Curva ajustada por Mínimos Quadrados (Problema 1)",fontsize=14)
+    plt.title(u"Curva ajustada por Mínimos Quadrados (Problema 2)",fontsize=14)
     plt.legend(loc=0,fontsize=14)
-    plt.savefig("output/problem_1.pdf")
+    plt.savefig("output/problem_2.pdf")
 
 def plotLimitPoint (x,y):
     plt.scatter(x,y,label="limit",marker='x',s=60,c="red")
@@ -51,15 +51,21 @@ def plotLimitPoint (x,y):
 def main():
 
     points_filename = sys.argv[1]
-    solution_filename = sys.argv[2]
+    points_filename2 = sys.argv[2]
+    solution_filename = sys.argv[3]
+    solution_filename2 = sys.argv[4]
     
-    x1, y1 = readPoints(points_filename)
-    x2, y2 = readPoints(solution_filename)
-    x3, y3 = [11.6160000000, 1998.8567991085]
+    xpts1, ypts1 = readPoints(points_filename)
+    xpts2, ypts2 = readPoints(points_filename2)
     
-    showPoints(x1,y1)
-    plotSolution(x2,y2)
-    plotLimitPoint(x3,y3)
+    x1, y1 = readPoints(solution_filename)
+    x2, y2 = readPoints(solution_filename2)
+    
+    showPoints(xpts1,ypts1,"red","set_1")
+    plotSolution(x1,y1,"red","set_1")
+
+    showPoints(xpts2,ypts2,"blue","set_2")
+    plotSolution(x2,y2,"blue","set_2")
 
     writeOutput()
     #showOutput()

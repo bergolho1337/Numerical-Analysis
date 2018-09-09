@@ -42,6 +42,7 @@ char *getMethodName (const int linear_system_id)
         case 1: return "Gauss_Seidel";
         case 2: return "CG";
         case 3: return "BiCG";
+        case 4: return "LUDecomposition";
         default: 
         {
                 fprintf(stderr,"[Linear-System] Error! Invalid identifier!\n");

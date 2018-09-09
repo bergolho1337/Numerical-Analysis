@@ -35,7 +35,12 @@ double compute_coefficient_matrix (set_least_squares_fn *phi, const int i, const
 double compute_coefficient_rhs (set_least_squares_fn *phi, const int i,\
                             const double *x, const double *y, const int npoints);
 
+void solve_second_part_problem_2 (struct solver_data *s);
+
 void print_points (struct solver_data *s);
 void write_solution (struct solver_data *s);
+void write_solution_problem_1 (FILE *file, struct solver_data *s);
+void write_solution_problem_2 (FILE *file, struct solver_data *s);
+
 
 #endif

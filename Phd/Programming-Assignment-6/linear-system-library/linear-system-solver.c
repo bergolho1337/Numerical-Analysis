@@ -288,3 +288,104 @@ void BiCG (double *A, double *b, const int n, double *x)
     free(q1);
     free(q2);
 }
+
+// LU Decomposition with partial pivoting
+void LUDecomposition (double *A, double *b, const int n, double *x)
+{
+
+    // Auxiliary vector y and pivot, they can be static arrays ...
+    double y[n];
+    int pivot[n];
+
+    int pivot_line;
+    double Amax;
+
+    for (int i = 0; i < n; i++)
+        pivot[i] = i;
+
+    // For each line
+    for (int i = 0; i < n-1; i++)
+    {
+        choosePivot(A,&pivot_line,&Amax,i,n);
+        // The pivot element changed ? If so we need to switch lines
+        if (pivot_line != i)
+        {
+            switchLines(A,pivot,pivot_line,i,n);
+        }
+
+        // Check if the matrix is not singular
+        // If not, apply a Gaussian Elimination on the current line
+        if (fabs(A[i*n+i]) != 0.0)
+        {
+            double r = 1 / A[i*n+i];
+            for (int j = i+1; j < n; j++)
+            {
+                double m = A[j*n+i] * r;
+
+                // Write the multiplier on the inferior triangular matrix L
+                A[j*n+i] = m;
+
+                // Write the results on the superior triangular matrix U
+                for (int k = i+1; k < n; k++)
+                {
+                    A[j*n+k] -= (m * A[i*n+k]);
+                }
+            }
+        }
+    }
+
+    // Forward substitution using the pivot array    
+    int k = pivot[0];
+    y[0] = b[k];
+    for (int i = 1; i < n; i++)
+    {
+        double sum = 0.0;
+        for (int j = 0; j <= i; j++)
+            sum += A[i*n+j] * y[j];
+        k = pivot[i];
+        y[i] = (b[k] - sum);
+    }
+
+    // Backward substitution
+    x[n-1] = y[n-1] / A[(n-1)*n+(n-1)];
+    for (int i = n-2; i >= 0; i--)
+    {
+        double sum = 0.0;
+        for (int j = i+1; j < n; j++)
+            sum += A[i*n+j] * x[j];
+        x[i] = (y[i] - sum) / A[i*n+i];
+    }
+
+}
+
+void choosePivot (double *LU, int *pivot_line, double *Amax, const int i, const int N)
+{
+    *pivot_line = i;
+    *Amax = fabs(LU[i*N+i]);
+
+    // For all the lines below 'i' search for the maximum value in module
+    for (int j = i+1; j < N; j++)
+    {
+        double value = fabs(LU[j*N+i]);
+        if (value > *Amax)
+        {
+            *Amax = value;
+            *pivot_line = j; 
+        }
+    }
+}
+
+void switchLines (double *LU, int pivot[], const int pivot_line, const int i, const int N)
+{
+    // Copy the role line
+    // TO DO: maybe a pointer swap will be faster ...
+    for (int j = 0; j < N; j++)
+    {
+        double tmp = LU[i*N+j];
+        LU[i*N+j] = LU[pivot_line*N+j];
+        LU[pivot_line*N+j] = tmp;
+    }
+    int m = pivot[i];
+    pivot[i] = pivot[pivot_line];
+    pivot[pivot_line] = m;
+}
