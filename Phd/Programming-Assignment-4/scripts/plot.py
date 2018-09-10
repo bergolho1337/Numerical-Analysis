@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -25,30 +26,39 @@ def readInterpolatePoints (filename):
     return z
 
 def showPoints (x,y):
-    plt.ylim(0,10)
+    #plt.ylim(0,10)
     plt.scatter(x,y)
 
-def showInterpolatePoints (z):
-    plt.ylim(0,20)
-    plt.plot(z[:,0],z[:,1])
-    plt.grid() 
+def showInterpolatePoints (z, colorname, labelname):
+    #plt.ylim(0,20)
+    plt.plot(z[:,0],z[:,1],c=colorname,label=labelname)
+    #plt.grid() 
     #plt.show()
 
-def writeOutput (x,y,z):
+def writeOutput ():
+    plt.grid()
+    plt.ylim(0,20)
+    plt.xlabel(u"x",fontsize=15)
+    plt.ylabel(u"y",fontsize=15)
+    plt.title(u"Comparação entre as interpolações",fontsize=14)
+    plt.legend(loc=0,fontsize=14)
     plt.savefig("output.pdf")
 
 def main():
 
     points_filename = sys.argv[1]
     interpolate_filename = sys.argv[2]
+    interpolate_filename2 = sys.argv[3]
     
     x,y = readPoints(points_filename)
-    z = readInterpolatePoints(interpolate_filename)
+    z1 = readInterpolatePoints(interpolate_filename)
+    z2 = readInterpolatePoints(interpolate_filename2)
 
     showPoints(x,y)
-    showInterpolatePoints(z)
+    showInterpolatePoints(z1,"red","Lagrange")
+    showInterpolatePoints(z2,"blue","Cplines")
 
-    writeOutput(x,y,z)
+    writeOutput()
 
 if __name__ == "__main__":
     main()

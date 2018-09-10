@@ -18,14 +18,20 @@ void Usage (int argc, char *argv[])
     std::cout << "-----------------------------------------------------------------------" << std::endl;
     std::cout << "Examples:" << std::endl;
     std::cout << "\tLagrange polynomials with default interval:" << std::endl;
-    std::cout << "$ " << argv[0] << " 0 0 ../inputs/points_1.txt\n" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 0 ./inputs/points_1.txt\n" << std::endl;
     std::cout << "\tLagrange polynomials with prescribed interval:" << std::endl;
-    std::cout << "$ " << argv[0] << " 0 1 ../inputs/points_2.txt" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 1 ./inputs/points_2.txt" << std::endl;
     std::cout << "\t\t2" << std::endl;
     std::cout << "\t\t0 2" << std::endl;
     std::cout << "\t\t2 4\n" << std::endl;
     std::cout << "\tCubic splines with default interval:" << std::endl;
-    std::cout << "$ " << argv[0] << " 2 0 ../inputs/points_2.txt\n" << std::endl;
+    std::cout << "$ " << argv[0] << " 2 0 ./inputs/points_2.txt\n" << std::endl;
+    std::cout << "\tLetter a:" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 0 ./inputs/snoopy_points.txt\n" << std::endl;
+    std::cout << "\tLetter b:" << std::endl;
+    std::cout << "$ " << argv[0] << " 0 1 ./inputs/snoopy_points.txt < prescribed_input_best\n" << std::endl;
+    std::cout << "\tLetter c:" << std::endl;
+    std::cout << "$ " << argv[0] << " 2 0 ./inputs/snoopy_points.txt\n" << std::endl;
     std::cout << "-----------------------------------------------------------------------" << std::endl;
     
 }

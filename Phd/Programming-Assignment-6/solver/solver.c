@@ -96,7 +96,7 @@ void solve (struct solver_data *s)
                              s->linear_system->b,\
                              s->linear_system->n,\
                              s->linear_system->x);
-    //printVector("x",s->linear_system->x,s->linear_system->n);
+    printVector("x",s->linear_system->x,s->linear_system->n);
 
     // If we are solving Problem 2 we need to read the second set of points,
     // modify the linear system by fixing the linear coefficient found from the first set.
@@ -240,7 +240,7 @@ void write_solution (struct solver_data *s)
         write_solution_problem_2(file,s);
     }
     // Output for problem 3 ...
-    else
+    else if (s->problem_id == 3)
     {
         write_solution_problem_3(file,s);
     }
