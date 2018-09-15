@@ -22,7 +22,7 @@ if [ $1 -eq 1 ]; then
     echo "[Problem 1] Done"
 elif [ $1 -eq 2 ]; then
     echo "[Problem 2] Generating plot ..."
-	 python ./scripts/plot_problem_2.py ./inputs/points1-problem-2.txt ./inputs/points2-problem-2.txt ./solution.dat ./solution2.dat
+	 python ./scripts/plot_problem_2.py ./inputs/points1-problem-2.txt ./inputs/points2-problem-2.txt ./solution2.dat
     echo "[Problem 2] Done"
 else
     echo "[Problem 3] Generating plot ..."

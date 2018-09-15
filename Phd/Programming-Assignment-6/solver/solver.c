@@ -78,31 +78,33 @@ void free_solver_data (struct solver_data *s)
 
 void solve (struct solver_data *s)
 {
-    // ____________________________________________________________
-    // Build the linear system structures
-    s->linear_system->n = s->n;
-    
-    s->linear_system->A = build_matrix(s);
-    //printMatrix("A",s->linear_system->A,s->linear_system->n);
-
-    s->linear_system->b = build_rhs(s);
-    //printVector("b",s->linear_system->b,s->linear_system->n);
-    
-    s->linear_system->x = (double*)malloc(sizeof(double)*s->n);
-
-    // ____________________________________________________________
-    // Solve the linear system
-    s->linear_system->solver(s->linear_system->A,\
-                             s->linear_system->b,\
-                             s->linear_system->n,\
-                             s->linear_system->x);
-    printVector("x",s->linear_system->x,s->linear_system->n);
-
-    // If we are solving Problem 2 we need to read the second set of points,
-    // modify the linear system by fixing the linear coefficient found from the first set.
-    if (s->problem_id == 2)
+    if (s->problem_id == 1)
     {
-        solve_second_part_problem_2(s);
+        // ____________________________________________________________
+        // Build the linear system structures
+        s->linear_system->n = s->n;
+        
+        s->linear_system->A = build_matrix(s);
+        //printMatrix("A",s->linear_system->A,s->linear_system->n);
+
+        s->linear_system->b = build_rhs(s);
+        //printVector("b",s->linear_system->b,s->linear_system->n);
+        
+        s->linear_system->x = (double*)malloc(sizeof(double)*s->n);
+
+        // ____________________________________________________________
+        // Solve the linear system
+        s->linear_system->solver(s->linear_system->A,\
+                                s->linear_system->b,\
+                                s->linear_system->n,\
+                                s->linear_system->x);
+        printVector("alpha",s->linear_system->x,s->linear_system->n);
+    }
+
+    // If we are solving Problem 2 we need to read the second set of points
+    else if (s->problem_id == 2)
+    {
+        solve_problem_2(s);
     }
 
     write_solution(s);
@@ -237,7 +239,7 @@ void write_solution (struct solver_data *s)
     // Output for problem 2 ...
     else if (s->problem_id == 2)
     { 
-        write_solution_problem_2(file,s);
+        //write_solution_problem_2(file,s);
     }
     // Output for problem 3 ...
     else if (s->problem_id == 3)
@@ -248,10 +250,16 @@ void write_solution (struct solver_data *s)
     fclose(file);
 }
 
-void solve_second_part_problem_2 (struct solver_data *s)
+
+
+void solve_problem_2 (struct solver_data *s)
 {
     fprintf(stdout,"\n[Problem 2] Solving the problem for the second set of points ...\n");
     fprintf(stdout,"[Problem 2] Creating another structure for the second set ...\n");
+
+    // ________________________________________________________________________________
+    // Adjust the number of constants to be determined for this particular problem
+    s->n = 3;
 
     // ________________________________________________________________________________
     // Building another structure for the second set of points
@@ -270,25 +278,13 @@ void solve_second_part_problem_2 (struct solver_data *s)
 
     // ________________________________________________________________________________
     // Building the linear system
-    s2->linear_system->n = s2->n;
-    s2->linear_system->A = build_matrix(s2);
-    s2->linear_system->b = build_rhs(s2);
+    s2->linear_system->A = build_matrix_2(s);
+    s2->linear_system->b = build_rhs_2(s,s2);
     s2->linear_system->x = (double*)malloc(sizeof(double)*s2->n);
 
-    // ________________________________________________________________________________
-    // Modify the linear system so that the second coefficient alpha_1 will be equal to
-    // the alpha_1 from the first set.
-    double alpha_1 = s->linear_system->x[1];
-    s2->linear_system->A[2] = 0.0f;
-    s2->linear_system->A[3] = 1.0f;
-    s2->linear_system->b[1] = alpha_1;
-
-    solve(s2);
-
-    // TO DO: This is not right !!!!
-    // ________________________________________________________________________________
-    // Hacking the coefficient to be fixed at this value ...
-    s2->linear_system->x[1] = alpha_1;
+    // ________________________________________________________________________________  
+    // Solve the linear system
+    s2->linear_system->solver(s2->linear_system->A,s2->linear_system->b,s2->n,s2->linear_system->x);
 
     //printVector("set1_alpha",s->linear_system->x,s->linear_system->n);
     //printVector("set2_alpha",s2->linear_system->x,s2->linear_system->n);
@@ -299,9 +295,11 @@ void solve_second_part_problem_2 (struct solver_data *s)
 
     double *alpha = s2->linear_system->x;
     
-    double a = alpha[1];
-    double b = alpha[0];
-    fprintf(stdout,"\n[Solution Problem 2] g = %.10lf + %.10lf*x\n",b,a);
+    double a = alpha[0];
+    double b = alpha[1];
+    double c = alpha[2];
+    fprintf(stdout,"\n[Solution Problem 2] f = %.10lf + %.10lf*x\n",b,a);
+    fprintf(stdout,"\n[Solution Problem 2] g = %.10lf + %.10lf*x\n",c,a);
 
     // Then, we calculate the linspace for the points to be plotted using the adjusted curve
     int npoints = s2->npoints;
@@ -313,15 +311,85 @@ void solve_second_part_problem_2 (struct solver_data *s)
     for (int k = 0; k < NEVAL+1; k++)
     {
         double x = xpts[0] + k*h;
-        double value = a*x + b;
+        // First curve formula ...
+        double value1 = a*x + b;
+        // Second curve formula ...
+        double value2 = a*x + c;
 
-        fprintf(file,"%.10lf %.10lf\n",x,value);
+        fprintf(file,"%.10lf %.10lf %.10lf\n",x,value1,value2);
     }
 
     fclose(file);
 
     free_solver_data(s2);
     
+}
+
+double* build_matrix_2 (struct solver_data *s1)
+{
+    // Hardcode the number of constants to calculated for Problem 2
+    int n = 3;
+
+    // Get reference to the points dataset
+    int npoints = s1->npoints;
+    double *x = s1->x;
+
+    // Allocate memory
+    double *A = (double*)malloc(sizeof(double)*n*n);
+
+    // Compute the coefficients of the matrix 
+    double aux1 = 0.0f, aux2 = 0.0f, aux3 = 0.0f;
+    for (int i = 0; i < npoints; i++)
+    {
+        aux1 += pow(x[i],2);
+        aux2 += x[i];
+        aux3 += 1.0f;
+    }
+    aux1 *= 2.0f;
+
+    // Build the matrix
+    A[0] = aux1;
+    A[1] = aux2;
+    A[2] = aux2;
+    A[3] = aux2;
+    A[4] = aux3;
+    A[5] = 0.0f;
+    A[6] = aux2;
+    A[7] = 0.0f;
+    A[8] = aux3;
+
+    return A;
+}
+
+double* build_rhs_2 (struct solver_data *s1, struct solver_data *s2)
+{
+    // Hardcode the number of constants to calculated for Problem 2
+    int n = 3;
+
+    // Get reference to the points dataset
+    int npoints = s1->npoints;
+    double *x = s1->x;
+    double *f = s1->y;
+    double *g = s2->y;
+
+    // Allocate memory
+    double *b = (double*)malloc(sizeof(double)*n);
+
+    // Compute the coefficients of the matrix 
+    double aux1 = 0.0f, aux2 = 0.0f, aux3 = 0.0f;
+    for (int i = 0; i < npoints; i++)
+    {
+        aux1 += x[i]*(f[i] + g[i]);
+        aux2 += f[i];
+        aux3 += g[i];
+    }
+
+    // Build the RHS
+    b[0] = aux1;
+    b[1] = aux2;
+    b[2] = aux3;
+
+    return b;
 }
 
 void write_solution_problem_1 (FILE *file, struct solver_data *s)

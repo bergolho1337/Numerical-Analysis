@@ -30,12 +30,14 @@ void solve (struct solver_data *s);
 void read_points (struct solver_data *s);
 double* build_matrix (struct solver_data *s);
 double* build_rhs (struct solver_data *s);
+double* build_matrix_2 (struct solver_data *s1);
+double* build_rhs_2 (struct solver_data *s1, struct solver_data *s2);
 double compute_coefficient_matrix (set_least_squares_fn *phi, const int i, const int j,\
                             const double *x, const int npoints);
 double compute_coefficient_rhs (set_least_squares_fn *phi, const int i,\
                             const double *x, const double *y, const int npoints);
 
-void solve_second_part_problem_2 (struct solver_data *s);
+void solve_problem_2 (struct solver_data *s);
 
 void print_points (struct solver_data *s);
 void write_solution (struct solver_data *s);
