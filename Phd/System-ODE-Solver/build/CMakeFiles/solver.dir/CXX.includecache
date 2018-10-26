@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/bergolho/Documentos/Github/Numerical-Analysis/Phd/System-ODE-Solver/main.cpp
+iostream
+-
+cstdio
+-
+cstdlib
+-
+cmath
+-
+
