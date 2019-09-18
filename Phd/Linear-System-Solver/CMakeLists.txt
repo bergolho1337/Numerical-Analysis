@@ -8,7 +8,7 @@ include_directories(include)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
 
 # EXECUTABLE_OUTPUT_PATH is the place where CMake will store the executables
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 # This will include all the files on the /src folder that has the .cxx extension
 file(GLOB SOURCES "src/*.cxx")
