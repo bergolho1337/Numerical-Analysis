@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/berg/Github/Numerical-Analysis/Phd/Poisson-Equation-1D/src/main.cpp
+iostream
+-
+cmath
+-
+cstdio
+-
+cstdint
+-
+cstring
+-
+
